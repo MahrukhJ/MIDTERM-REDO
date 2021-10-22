@@ -11,3 +11,553 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+
+Midterm Corrections!
+#--------------------Question _1--------------------
+
+#Form a hypothesis test of the form, “people with various educational qualifications in Region have different fraction vaxxed compared with other Region.”
+#choose different ways to operationalize educational qualification (compare above some level with below that level, but what level?) and different regions
+#Please provide estimate, standard error, t-stat and a p-value for the hypothesis test and a confidence interval. 
+#Write a short paragraph explaining the test (carefully noting what is the null hypothesis) and explaining the results of that test  
+
+I want to test if people with atleast an associates degree in the West have a different fraction vaxxed compared with people in the South. 
+
+'Null hypothesis:' There is no difference between the fraction of people vaxxed in the West who have at least an associates degree and the fraction of people vaxxed in the South who hold at least an associates.  
+'Alternative Hypothesis:' There is a difference between the fraction of people vaxxed in the West who have at least an associates degree and the fraction of people vaxxed in the South who hold at least an associates. 
+
+Significance Level = 0.05
+#This means that there is a 5% chance that I can accept the alternative hypothesis when the null hypothesis is actually true. 
+#The smaller the significance level, the greater the burden of proof needed to reject the null hypothesis, or in other words, to support the alternative hypothesis.
+
+Vaccinated_Personel <- Household_Pulse_data$RECVDVACC == "yes got vaxx"
+Question_1_Regression <- lm(Vaccinated_Personel ~ EEDUC*REGION)
+summary(Question_1_Regression)
+
+'This regression will provide the estimate, standard error, t-value and p-value for all of the coefficients, which include each level of education, 
+each region and region*education levels, amounting to a total of 34 regression coefficients. Of these coefficients, I will display the relevant ones 
+to my null and alternative hypotheses. Personally, I find using the entire category (EEDUC, REGION) in the regression easier than creating separate variables. 
+This way, I can compare across all levels of education and all regions and then explore any striking contrasts!'
+
+Call:
+lm(formula = Vaccinated_Personel ~ EEDUC * REGION)
+
+Residuals:
+  Min       1Q   Median       3Q      Max 
+-0.96136  0.06325  0.09532  0.16855  0.36923 
+Coefficients:
+                               Estimate   Std. Error t value Pr(>|t|)
+(Intercept)                    0.659574   0.047645  13.844  < 2e-16 ***
+EEDUCassoc deg:REGIONWest     -0.148837   0.055986  -2.658  0.00785 ** 
+EEDUCbach deg:REGIONWest      -0.143350   0.055150  -2.599  0.00934 ** 
+EEDUCadv deg:REGIONWest       -0.132089   0.055181  -2.394  0.01668 *  
+EEDUCassoc deg:REGIONSouth    -0.075287   0.055883  -1.347  0.17791    
+EEDUCbach deg:REGIONSouth     -0.054275   0.055025  -0.986  0.32395    
+EEDUCadv deg:REGIONSouth      -0.049370   0.055037  -0.897  0.36971
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3266 on 69086 degrees of freedom
+Multiple R-squared:  0.03907,	Adjusted R-squared:  0.0387 
+F-statistic:   104 on 27 and 69086 DF,  p-value: < 2.2e-16
+
+confint(Question_1_Regression)
+                                  2.5 %      97.5 %
+(Intercept)                    0.56619071  0.75295822
+EEDUCassoc deg:REGIONWest     -0.25856909 -0.03910559
+EEDUCbach deg:REGIONWest      -0.25144427 -0.03525498
+EEDUCadv deg:REGIONWest       -0.24024379 -0.02393405
+EEDUCassoc deg:REGIONSouth    -0.18481833  0.03424422
+EEDUCbach deg:REGIONSouth     -0.16212397  0.05357316
+EEDUCadv deg:REGIONSouth      -0.15724248  0.05850324
+
+Overall, the p-value for the Intercept, people living in the West with an associates, people in the West with a bachelors and people in the West with an advanced degree 
+read, < 2e-16, 0.00785, 0.00934, 0.01668, respectively, all of which are less than 0.05, the chosen level of significance. This means that I can reject the null
+hypothesis and accept the alternative hypothesis since the p-values indicate strong evidence against the null hypothesis, as there is less than a 5% probability the null is correct.
+More specifically, we can reject that there is no difference between the fraction of people vaxxed in the West who have at least an associates degree and the fraction of people
+vaxxed in the South who hold at least an associates and accept that there is a difference between the fraction of people vaxxed in the West who have at least an associates degree
+and the fraction of people vaxxed in the South who hold at least an associates because the results are statistically significant!
+
+#--------------------Question _2--------------------
+
+'Null Hypothesis:' There is no difference between the fraction of people vaxxed who are female with at least bachelors degree and people who are male with at least a bachelors degree. 
+'Alternative Hypothesis:' There is a difference the fraction of people vaxxed who are female with at least bachelors degree and people who are male and have at least a bachelors degree.
+
+Question_2_Regression <- lm(Vaccinated_Personel ~ EEDUC*GENID_DESCRIBE)
+summary(Question_2_Regression)
+
+Similar to the regression output in the first question, the coefficients for this regression include education levels, gender categories and education levels * gender categories. 
+For simplicity sake, I will display the relevant coefficients to my null and alternative hypotheses. 
+
+Call:
+  lm(formula = Vaccinated_Personel ~ EEDUC * GENID_DESCRIBE)
+
+Residuals:
+  Min       1Q   Median       3Q      Max 
+-0.95686  0.04841  0.08771  0.16711  0.63636 
+
+Coefficients:
+                                           Estimate  Std. Error t value Pr(>|t|)    
+(Intercept)                                0.78571    0.08606   9.130  < 2e-16 ***
+EEDUCbach deg:GENID_DESCRIBEfemale         0.56619    0.09082   6.234 4.57e-10 ***
+EEDUCadv deg:GENID_DESCRIBEfemale          0.59331    0.09102   6.518 7.16e-11 ***
+EEDUCbach deg:GENID_DESCRIBEmale           0.51791    0.09165   5.651 1.60e-08 ***
+EEDUCadv deg:GENID_DESCRIBEmale            0.53517    0.09185   5.826 5.69e-09 ***
+
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.322 on 69079 degrees of freedom
+Multiple R-squared:  0.06622,	Adjusted R-squared:  0.06576 
+F-statistic: 144.1 on 34 and 69079 DF,  p-value: < 2.2e-16
+
+confint(Question_2_Regression)
+
+                                               2.5 %      97.5 %
+(Intercept)                                0.61703779  0.95439078
+EEDUCbach deg:GENID_DESCRIBEfemale         0.38817652  0.74419862
+EEDUCadv deg:GENID_DESCRIBEfemale          0.41490569  0.77170999
+EEDUCbach deg:GENID_DESCRIBEmale           0.33826667  0.69754586
+EEDUCadv deg:GENID_DESCRIBEmale            0.35513732  0.71519714
+
+Interestingly, the p-values for females with a bachelors degree, females with an advanced degree, males with a bachelors degree
+and males with an advanced degree are 4.57e-10, 7.16e-11, 1.60e-08 and 5.69e-09, respectively. All of the p-values are staistically 
+significant because they are less than the chosen level of significance, 0.05 which means that we can reject the null hypothesis 
+that there is no difference between the fraction of people vaxxed who are female with at least bachelors degree and people who are
+male with at least a bachelors degree and instead accept the alternative hypothesis which states that there is a difference between 
+the fraction of people vaxxed who are female with at least bachelors degree and people who are male with at least a bachelors degree. 
+
+#--------------------Question _3--------------------
+
+#Choose a subgroup of the sample to consider and provide summary statistics of that subgroup.
+I will create a subgroup consisting of people who are Asian. 
+
+Asian <- Household_Pulse_data$RRACE == "Asian"
+summary(Asian)
+Mode      FALSE    TRUE 
+logical   65553    3561 
+
+Asian_subset <- subset(Household_Pulse_data, Asian)
+summary(Asian_subset)
+^can be found at the bottom of the repository since the output is longer^
+#want to remove Asians from the original sample in order to compare
+data_without_asian <- subset(Household_Pulse_data, !Asian) 
+summary(data_without_asian)
+^can be found at the bottom of the repository since the output is longer^
+
+#summary statistics of subgroup versus rest of sample in terms of vaccinations and level of education attained
+Asian_Vaxx <- Asian_subset$RECVDVACC
+summary((Asian_subset$RECVDVACC))
+NA            yes got vaxx     no did not get vaxx 
+26                3401                 134 
+
+data_without_asian_vaxx <- data_without_asian$RECVDVACC
+summary((data_without_asian$RECVDVACC))
+NA           yes got vaxx       no did not get vaxx 
+825               56925                7803
+
+Asian_Education <- Asian_subset$EEDUC
+summary(Asian_Education)
+less than hs  some hs   HS diploma    some coll    assoc deg     bach deg      adv deg 
+    29           44          200          454          266         1245         1323 
+
+data_without_asian_education <- data_without_asian$EEDUC
+summary(data_without_asian_education)
+less than hs  some hs   HS diploma    some coll    assoc deg     bach deg      adv deg 
+   382         892         7657        14142         7242        18830        16408
+                          
+Note: I chose not to view the summary as.numeric because I personally prefer viewing the numbers instead of percentages or decimal points.
+
+#Form a hypothesis test about an interesting variable.
+I think it would be interesting to test whether there is a relationship between having an advanced degree and marital status within my subgroup.
+
+null hypothesis: There is no relationship between having an advanced degree and marital status within my subgroup.
+alternative hypothesis: There is a relationship between having an advanced degree and marital status within my subgroup.
+
+-first I will create variables for the categories of marriage so I can include them in the regression
+
+Asian_advdeg <- Asian_subset$EEDUC == "adv deg"
+summary(Asian_advdeg)
+
+married <- Asian_subset$MS == "married"
+widowed <- Asian_subset$MS == "widowed"
+divorced <- Asian_subset$MS == "divorced"
+separated <- Asian_subset$MS == "separated"
+never <- Asian_subset$MS == "never"
+
+#dependent variable: advanced degree 
+#independent variable: marital status
+Question_3_Regression <- lm(Asian_advdeg ~ married + widowed + divorced + separated + never)
+summary(Question_3_Regression)
+
+Call:
+  lm(formula = Asian_advdeg ~ married + widowed + divorced + separated + 
+       never)
+
+Residuals:
+  Min      1Q  Median      3Q     Max 
+-0.4300 -0.4300 -0.2539  0.5700  0.8205 
+
+Coefficients:
+               Estimate  Std. Error t value Pr(>|t|)    
+(Intercept)    0.32609    0.07028   4.640 3.62e-06 ***
+marriedTRUE    0.10396    0.07097   1.465    0.143    
+widowedTRUE   -0.05642    0.08656  -0.652    0.515    
+divorcedTRUE  -0.04811    0.07590  -0.634    0.526    
+separatedTRUE -0.14660    0.10376  -1.413    0.158    
+neverTRUE     -0.07224    0.07233  -0.999    0.318    
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4767 on 3555 degrees of freedom
+Multiple R-squared:  0.02846,	Adjusted R-squared:  0.02709 
+F-statistic: 20.83 on 5 and 3555 DF,  p-value: < 2.2e-16
+
+confint(Question_3_Regression)
+                   2.5 %     97.5 %
+(Intercept)    0.18828599 0.46388793
+marriedTRUE   -0.03519863 0.24311055
+widowedTRUE   -0.22614057 0.11329250
+divorcedTRUE  -0.19691229 0.10069506
+separatedTRUE -0.35003654 0.05683699
+neverTRUE     -0.21404693 0.06956533
+
+Following the results from the regression, the only p-value that is statistically significant at 0.05 is the intercept at 3.62e-06. 
+This is low-key surprising to me because I thought there would definitely be significance since marriage is highly stressed upon
+in certain parts of Asia. Nonetheless, since the p-values were not statistically significant, this indicates strong evidence for 
+the null hypothesis, so we retain the null hypothesis and reject the alternative hypothesis. More specifically, we accept that 
+there is no relationship between having an advanced degree and marital status within this subgroup and we reject that there
+is a relationship between having an advanced degree and marital status within this subgroup.
+
+
+#Using a k-nn classifier, can you find relevant information to predict an interesting outcome?
+Jumping off of the previous results, I would like to predict marriage within my subgroup. 
+^I have already created the variables for the categories within the MS column. 
+
+variables I think would aid in predicting marriage are income, education and anxiety level
+----------List of variables to try and predict marriage----------  
+norm_income1 <- norm_varb(Asian_subset$INCOME == "HH income $35k - 49.9")
+norm_income2 <- norm_varb((Asian_subset$INCOME == "HH income $50k - 74.9"))
+norm_HS_degree <- norm_varb((Asian_subset$EEDUC == "HS diploma"))
+norm_some_college <- norm_varb((Asian_subset$EEDUC == "some coll"))
+norm_associates <- norm_varb((Asian_subset$EEDUC == "assoc deg"))
+norm_bachelors <- norm_varb((Asian_subset$EEDUC == "bach deg"))
+norm_advanced <- norm_varb((Asian_subset$EEDUC == "adv deg"))
+norm_anxiety <- norm_varb((Asian_subset$ANXIOUS == "no anxiety over past 2 wks"))
+------------------------------------------------------------------------
+
+marriage_indx <- factor((married + 2*widowed + 3*divorced + 4*separated + 5*never), levels=c(1,2,3,4,5),labels = c("Mar","Wid","Div","Sep","Nev"))
+norm_varb <- function(X_in) { (X_in - min(X_in, na.rm = TRUE))/( max(X_in, na.rm = TRUE) - min(X_in, na.rm = TRUE) )
+}
+
+data_use_prelim <- data.frame(norm_income1,norm_income2,norm_HS_degree,norm_some_college,norm_associates,norm_bachelors,norm_advanced,norm_anxiety)
+good_obs_data_use <- complete.cases(data_use_prelim,marriage_indx)
+dat_use <- subset(data_use_prelim,good_obs_data_use)
+y_use <- subset(marriage_indx,good_obs_data_use)
+
+set.seed(12345)
+NN_obs <- sum(good_obs_data_use == 1)
+select1 <- (runif(NN_obs) < 0.9)
+train_data <- subset(dat_use,select1)
+test_data <- subset(dat_use,(!select1))
+cl_data <- y_use[select1]
+true_data <- y_use[!select1]
+
+summary(cl_data)
+Mar  Wid  Div  Sep  Nev 
+2105   85  245   34  713 
+
+prop.table(summary(cl_data))
+Mar        Wid        Div        Sep        Nev 
+0.66153363 0.02671276 0.07699560 0.01068510 0.22407291 
+
+summary(train_data)
+
+norm_income1    norm_income2     norm_HS_degree    norm_some_college norm_associates   norm_bachelors  
+Min.   :0.000   Min.   :0.00000   Min.   :0.00000   Min.   :0.000     Min.   :0.00000   Min.   :0.0000  
+1st Qu.:0.000   1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.000     1st Qu.:0.00000   1st Qu.:0.0000  
+Median :0.000   Median :0.00000   Median :0.00000   Median :0.000     Median :0.00000   Median :0.0000  
+Mean   :0.104   Mean   :0.09711   Mean   :0.05625   Mean   :0.127     Mean   :0.07291   Mean   :0.3523  
+3rd Qu.:0.000   3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.000     3rd Qu.:0.00000   3rd Qu.:1.0000  
+Max.   :1.000   Max.   :1.00000   Max.   :1.00000   Max.   :1.000     Max.   :1.00000   Max.   :1.0000  
+norm_advanced     norm_anxiety   
+Min.   :0.0000   Min.   :0.0000  
+1st Qu.:0.0000   1st Qu.:0.0000  
+Median :0.0000   Median :0.0000  
+Mean   :0.3715   Mean   :0.4397  
+3rd Qu.:1.0000   3rd Qu.:1.0000  
+Max.   :1.0000   Max.   :1.0000  
+
+require(class)
+for (indx in seq(1, 9, by= 2)) {
+  pred_borough <- knn(train_data, test_data, cl_data, k = indx, l = 0, prob = FALSE, use.all = TRUE)
+  num_correct_labels <- sum(pred_borough == true_data)
+  correct_rate <- num_correct_labels/length(true_data)
+  print(c(indx,correct_rate))
+}
+
+[1] 1.0000000 0.6606607
+[1] 3.0000000 0.6636637
+[1] 5.0000000 0.6636637
+[1] 7.0000000 0.6636637
+[1] 9.0000000 0.6636637
+
+I am very proud of the results for this k-nn classifier because they were so close to the actual numbers! 
+For reference, 
+summary(Asian_subset$MS)
+NA    married   widowed  divorced separated     never 
+46      2330        89       277        39       780 
+
+compared to:
+summary(cl_data)
+Mar  Wid  Div  Sep  Nev 
+2105   85  245   34  713 
+
+Overall, in this k-nn model, the output accuracy is 66.06% and the variables I chose to use to predict marriage
+are income between 35k & 49.9, income between 50k & 74.9, education and no anxiety. I thought it would be 
+interesting to establish a connection between a persons income, education level and lack of anxiety to marriage
+because those are the factors that I would assume comes to mind when considering marriage. If I were to increase the  
+output accuracy, I would increase the number of variables by including whether a person eats at restaurants, which might mean
+that they are outgoing and if they have private insurance. 
+
+Name: Mahrukh Jaura
+Date: October 22nd, 2021
+
+
+--------------------'summary(Asian_subset)'--------------------
+
+RHISPANIC      RRACE               EEDUC              MS       EGENID_BIRTH      GENID_DESCRIBE
+Not Hispanic:3354   White:   0   less than hs:  29   NA       :  46   male  :1745   NA         :  42  
+Hispanic    : 207   Black:   0   some hs     :  44   married  :2330   female:1816   male       :1710  
+Asian:3561   HS diploma  : 200   widowed  :  89                 female     :1758  
+Other:   0   some coll   : 454   divorced : 277                 transgender:   7  
+assoc deg   : 266   separated:  39                 other      :  44  
+bach deg    :1245   never    : 780                                   
+adv deg     :1323                                                    
+SEXUAL_ORIENTATION                      KIDS_LT5Y                        KIDS_5_11Y  
+NA            :  83     NA                        :3113   NA                       :2901  
+gay or lesbian: 102     Yes children under 5 in HH: 448   Yes children 5 - 11 in HH: 660  
+straight      :3141                                                                       
+bisexual      : 105                                                                       
+something else:  38                                                                       
+dont know     :  92                                                                       
+
+KIDS_12_17Y                                ENROLLNONE                 RECVDVACC   
+NA                        :2893   NA                                :3230   NA                 :  26  
+Yes children 12 - 17 in HH: 668   children not in any type of school: 331   yes got vaxx       :3401  
+no did not get vaxx: 134  
+
+DOSESRV                         GETVACRV   
+NA                       : 178   NA                      :3430  
+yes got all doses        :3298   definitely will get vaxx:  23  
+yes plan to get all doses:  76   probably will get vaxx  :  32  
+no will not get all doses:   9   unsure about vaxx       :  22  
+probably not            :  14  
+definitely not          :  40  
+
+KIDDOSES                       KIDGETVAC   
+NA                                :2903   NA                      :3474  
+Yes kids got or will get all doses: 575   definitely will get vaxx:  27  
+no kids did not or will not       :  83   probably will get vaxx  :  13  
+unsure about vaxx       :  19  
+probably not            :   5  
+definitely not          :  10  
+dont know yet           :  13  
+HADCOVID                     WRKLOSSRV                             ANYWORK    
+NA                       :  52   NA                    : 101   NA                           : 106  
+yes doctor told had covid: 311   yes recent HH job loss: 494   yes employment in last 7 days:2318  
+no did not               :3167   no recent HH job loss :2966   no employment in last 7 days :1137  
+not sure                 :  31                                                                     
+
+KINDWORK              RSNNOWRKRV                                        CHLDCARE   
+NA                 :1267   NA             :2525   NA                                       :2876  
+work for govt      : 303   retired        : 415   yes impacts to childcare because pandemic: 159  
+work for private co:1451   other          : 234   no                                       : 526  
+work for nonprofit : 260   did not want   :  96                                                   
+self employed      : 230   caring for kids:  81                                                   
+work in family biz :  50   laid off       :  58                                                   
+(Other)        : 152                                                   
+CURFOODSUF                                                 CHILDFOOD   
+NA                            : 450   NA                                                 :3313  
+had enough food               :2487   often kids not eating enough because couldnt afford:  13  
+had enough but not what wanted: 522   sometimes kids not eating enough                   :  77  
+sometimes not enough food     :  83   kids got enough food                               : 158  
+often not enough food         :  19                                                             
+
+
+ANXIOUS    
+NA                                             : 534  
+no anxiety over past 2 wks                     :1547  
+several days anxiety over past 2 wks           : 989  
+more than half the days anxiety over past 2 wks: 223  
+nearly every day anxiety                       : 268  
+
+
+WORRY                                TENURE    
+NA                                             : 546   NA                           : 756  
+no worry over past 2 wks                       :1652   housing owned free and clear : 792  
+several days worried over past 2 wks           : 950   housing owned with mortgage  :1357  
+more than half the days worried over past 2 wks: 178   housing rented               : 630  
+nearly every day worry                         : 235   housing occupied without rent:  26  
+
+
+LIVQTRRV               RENTCUR                    MORTCUR    
+live in detached 1 family          :1798   NA             :2933   NA                 :2212  
+NA                                 : 785   current on rent: 528   current on mortgage:1193  
+live in bldg w 5+ apts             : 459   behind on rent : 100   behind on mortgage : 156  
+live in 1 family attached to others: 321                                                    
+live in building with 3-4 apts     : 106                                                    
+live in bldg w 2 apartments        :  61                                                    
+(Other)                            :  31                                                    
+EVICT                                               FORCLOSE   
+NA                                        :3471   NA                                           :3412  
+very likely evicted in next 2 months      :   7   very likely forclosed in next 2 months       :   2  
+somewhat likely evicted in next 2 months  :   9   somewhat likely forclosed in next 2 months   :  17  
+not very likely evicted in next 2 months  :  22   not very likely forclosed in next 2 months   :  33  
+not at all likely evicted in next 2 months:  52   not at all forclosed evicted in next 2 months:  97  
+
+
+EST_ST                       PRIVHLTH                     PUBHLTH           REGION    
+California: 850   has private health ins:2497   has public health ins: 756   Northeast: 521  
+Hawaii    : 274   no private health ins : 370   no public health ins :1952   South    : 931  
+Texas     : 263   NA                    : 694   NA                   : 853   Midwest  : 348  
+Washington: 203                                                              West     :1761  
+New Jersey: 130                                                                              
+Virginia  : 126                                                                              
+(Other)   :1715                                                                              
+INCOME     Num_kids_Pub_School Num_kids_Priv_School Num_kids_homeschool
+NA                   :1149   Min.   :0.000       Min.   :0.000        Min.   :0.000      
+HH income $150 - 199 : 521   1st Qu.:1.000       1st Qu.:1.000        1st Qu.:0.000      
+HH income $75 - 99.9 : 482   Median :1.000       Median :1.000        Median :1.000      
+HH income $35k - 49.9: 363   Mean   :1.562       Mean   :1.087        Mean   :0.663      
+HH income $50k - 74.9: 344   3rd Qu.:2.000       3rd Qu.:2.000        3rd Qu.:1.000      
+HH income $100k - 149: 332   Max.   :4.000       Max.   :2.000        Max.   :2.000      
+(Other)              : 370   NA's   :2691        NA's   :3354         NA's'   :3478       
+        Works_onsite           works_remote           Shop_in_store                  eat_in_restaurant
+ NA           : 406   NA             : 510   NA              : 475   NA                       : 507   
+ worked onsite:1731   worked remotely:1561   shopped in store:2569   eat at restaurant indoors:1485   
+ no           :1424   no             :1490   no              : 517   no                       :1569
+ 
+ 
+ --------------------'summary(data_without_asian)'--------------------
+ 
+ RHISPANIC       RRACE                EEDUC               MS        EGENID_BIRTH  
+ Not Hispanic:59306   White:56938   less than hs:  382   NA       :  835   male  :25847  
+ Hispanic    : 6247   Black: 5412   some hs     :  892   married  :37706   female:39706  
+ Asian:    0   HS diploma  : 7657   widowed  : 3783                 
+ Other: 3203   some coll   :14142   divorced :10033                 
+ assoc deg   : 7242   separated: 1175                 
+ bach deg    :18830   never    :12021                 
+ adv deg     :16408                                   
+ GENID_DESCRIBE       SEXUAL_ORIENTATION                      KIDS_LT5Y    
+ NA         : 1089   NA            : 1423    NA                        :59229  
+ male       :25086   gay or lesbian: 2241    Yes children under 5 in HH: 6324  
+ female     :38505   straight      :58097                                      
+ transgender:  195   bisexual      : 2183                                      
+ other      :  678   something else:  833                                      
+ dont know     :  776                                      
+ 
+ KIDS_5_11Y                        KIDS_12_17Y   
+ NA                       :55566   NA                        :55153  
+ Yes children 5 - 11 in HH: 9987   Yes children 12 - 17 in HH:10400  
+ 
+ ENROLLNONE                  RECVDVACC                          DOSESRV     
+ NA                                :61055   NA                 :  825   NA                       : 8927  
+ children not in any type of school: 4498   yes got vaxx       :56925   yes got all doses        :54464  
+ no did not get vaxx: 7803   yes plan to get all doses: 1917  
+ no will not get all doses:  245  
+ 
+ 
+ GETVACRV                                   KIDDOSES    
+ NA                      :57729   NA                                :55415  
+ definitely will get vaxx:  586   Yes kids got or will get all doses: 6560  
+ probably will get vaxx  :  699   no kids did not or will not       : 3578  
+ unsure about vaxx       : 1562                                             
+ probably not            : 1585                                             
+ definitely not          : 3392                                             
+ 
+ KIDGETVAC                          HADCOVID                      WRKLOSSRV    
+ NA                      :61910   NA                       : 1311   NA                    : 1860  
+ definitely will get vaxx:  460   yes doctor told had covid: 8811   yes recent HH job loss: 7564  
+ probably will get vaxx  :  426   no did not               :55054   no recent HH job loss :56129  
+ unsure about vaxx       :  717   not sure                 :  377                                 
+ probably not            :  588                                                                   
+ definitely not          : 1026                                                                   
+ dont know yet           :  426                                                                   
+ ANYWORK                     KINDWORK                RSNNOWRKRV   
+ NA                           : 2029   NA                 :29273   NA              :40134  
+ yes employment in last 7 days:36919   work for govt      : 6075   retired         :14609  
+ no employment in last 7 days :26605   work for private co:19919   other           : 3793  
+ work for nonprofit : 4795   sick or disabled: 1422  
+ self employed      : 4736   caring for kids : 1248  
+ work in family biz :  755   laid off        : 1106  
+ (Other)         : 3241  
+ CHLDCARE                              CURFOODSUF   
+ NA                                       :55543   NA                            : 6320  
+ yes impacts to childcare because pandemic: 2407   had enough food               :46747  
+ no                                       : 7603   had enough but not what wanted: 9425  
+ sometimes not enough food     : 2403  
+ often not enough food         :  658  
+ 
+ 
+ CHILDFOOD    
+ NA                                                 :60945  
+ often kids not eating enough because couldnt afford:  258  
+ sometimes kids not eating enough                   : 1114  
+ kids got enough food                               : 3236  
+ 
+ 
+ 
+ ANXIOUS     
+ NA                                             : 7412  
+ no anxiety over past 2 wks                     :25064  
+ several days anxiety over past 2 wks           :18805  
+ more than half the days anxiety over past 2 wks: 5917  
+ nearly every day anxiety                       : 8355  
+ 
+ 
+ WORRY                                 TENURE     
+ NA                                             : 7470   NA                           :10347  
+ no worry over past 2 wks                       :30224   housing owned free and clear :15946  
+ several days worried over past 2 wks           :16986   housing owned with mortgage  :26659  
+ more than half the days worried over past 2 wks: 4801   housing rented               :11949  
+ nearly every day worry                         : 6072   housing occupied without rent:  652  
+ 
+ 
+ LIVQTRRV                RENTCUR                     MORTCUR     
+ live in detached 1 family          :39550   NA             :53639   NA                 :38988  
+ NA                                 :10551   current on rent:10711   current on mortgage:25269  
+ live in bldg w 5+ apts             : 6272   behind on rent : 1203   behind on mortgage : 1296  
+ live in 1 family attached to others: 4307                                                      
+ live in mobile home                : 1759                                                      
+ live in building with 3-4 apts     : 1631                                                      
+ (Other)                            : 1483                                                      
+ EVICT                                                FORCLOSE    
+ NA                                        :64388   NA                                           :64283  
+ very likely evicted in next 2 months      :  200   very likely forclosed in next 2 months       :   63  
+ somewhat likely evicted in next 2 months  :  368   somewhat likely forclosed in next 2 months   :  201  
+ not very likely evicted in next 2 months  :  323   not very likely forclosed in next 2 months   :  441  
+ not at all likely evicted in next 2 months:  274   not at all forclosed evicted in next 2 months:  565  
+ 
+ 
+ EST_ST                        PRIVHLTH                      PUBHLTH            REGION     
+ California   : 4509   has private health ins:44372   has public health ins:22590   Northeast: 9957  
+ Texas        : 3503   no private health ins :10905   no public health ins :31429   South    :21749  
+ Florida      : 2658   NA                    :10276   NA                   :11534   Midwest  :13303  
+ Washington   : 2431                                                                West     :20544  
+ Oregon       : 1877                                                                                 
+ Massachusetts: 1866                                                                                 
+ (Other)      :48709                                                                                 
+ INCOME      Num_kids_Pub_School Num_kids_Priv_School Num_kids_homeschool
+ NA                     :19186   Min.   :0.00        Min.   :0.00         Min.   :0.00       
+ HH income $75 - 99.9   : 9635   1st Qu.:1.00        1st Qu.:0.00         1st Qu.:0.00       
+ HH income $35k - 49.9  : 8967   Median :2.00        Median :1.00         Median :1.00       
+ HH income $50k - 74.9  : 7486   Mean   :1.72        Mean   :1.02         Mean   :0.88       
+ HH income $150 - 199   : 5596   3rd Qu.:2.00        3rd Qu.:2.00         3rd Qu.:2.00       
+ HH income $25k - $34.9k: 5594   Max.   :4.00        Max.   :2.00         Max.   :2.00       
+ (Other)                : 9089   NA's   :52417       NA's   :63076        NA's'   :63943      
+        Works_onsite            works_remote            Shop_in_store                   eat_in_restaurant
+ NA           : 5944   NA             : 7512   NA              : 6398   NA                       : 6710  
+ worked onsite:33187   worked remotely:21302   shopped in store:51007   eat at restaurant indoors:30920  
+ no           :26422   no             :36739   no              : 8148   no                       :27923  
+                                                                       
+
